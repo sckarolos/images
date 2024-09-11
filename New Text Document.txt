@@ -1,0 +1,26 @@
+1. Fetching AEM Content during SSR
+During server-side rendering, you want to fetch the model.json from AEM when the Angular app is initialized. This allows Angular Universal to render the content on the server and send a fully rendered HTML page to the browser, improving SEO and performance.
+
+Steps:
+Configure HTTP Requests: Use Angular's HttpClient in a service or directly in app.server.ts to fetch the model.json during SSR.
+Handle the AEM Model URL: Set the model.json URL dynamically based on the current route or a specific path that you want to fetch from AEM.
+Inject Fetched Data into Angular Components: Once the model.json is fetched, you inject the data into the relevant Angular components during the SSR process.
+
+
+Explanation of Key Configurations:
+Fetching AEM model.json:
+
+The fetchAemModelJson(aemModelUrl) function makes an HTTP request to AEM's model.json endpoint, fetching the structured content data during server-side rendering.
+The URL for model.json is dynamically constructed based on the current request (req.path), meaning it fetches the correct content for the current route.
+Passing Data to Angular Components:
+
+Once the model.json data is fetched, it's passed as a provider (AEM_MODEL_DATA) into the Angular SSR rendering context.
+In your Angular app, you would inject this AEM_MODEL_DATA token into your components or services to use the fetched AEM content during the SSR process.
+
+
+Summary of app.server.ts Configurations:
+Fetch model.json: In app.server.ts, use an HTTP client or fetch to retrieve the AEM model.json based on the current request path.
+Pass Fetched Data: Pass the fetched model.json data into the Angular SSR context as a provider.
+Render Angular Components: In your Angular components, inject the AEM content and render it server-side.
+Express Server: Use the Express middleware to handle requests and trigger server-side rendering for each route.
+This configuration ensures that during server-side rendering (SSR), your Angular app can fetch and render content from AEM using model.json, providing a fully rendered HTML response for better SEO and performance.
