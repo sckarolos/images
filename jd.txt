@@ -1,0 +1,21 @@
+Job Title: Full-Stack Developer
+
+We are seeking a highly skilled Full-Stack Developer with expertise in modern web frameworks, cloud infrastructure, and API development. The ideal candidate will have extensive experience in building and supporting client-facing applications, with a strong focus on performance, scalability, and reliability.
+
+Key Responsibilities:
+
+Develop and maintain web applications using Angular (preferably the latest versions) and TypeScript.
+Build and optimize server-side logic using Node.js.
+Design, implement, and integrate RESTful APIs and GraphQL for seamless communication between front-end and back-end services.
+Ensure high-quality code by writing automated tests with Jest (essential) and Cypress (nice to have).
+Architect and manage cloud infrastructure, leveraging AWS services such as CloudFront, ECS, S3, and Route53.
+Provide production support for client-facing applications, ensuring availability and performance at all times.
+Implement and maintain CI/CD pipelines to ensure efficient development, testing, and deployment workflows.
+Nice to Have:
+
+Experience with Java and familiarity with Adobe Experience Manager (AEM) is a plus.
+Strong understanding of microservices architecture and modern development practices.
+This description covers the essential skills and expertise we are seeking for this role. Please let me know if there are any additional qualifications or adjustments you would like to include.
+
+Best regards,
+[Your Name]
