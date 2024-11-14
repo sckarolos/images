@@ -1,0 +1,102 @@
+Storybook 8 represents a significant upgrade over Storybook 6, offering multiple improvements in performance, user experience, and support for the latest frontend frameworks and tools. Here’s a summary of the main differences and benefits:
+
+Key Differences Between Storybook 6 and 8
+Performance Enhancements:
+
+Optimized Builds: Storybook 8 introduces much faster builds with optimizations that reduce build time and install size. For instance, Storybook 8.3 consolidated 18 packages into a single core package, reducing the install footprint by nearly 50% for Vite React-TS projects​
+STORYBOOK
+​
+STORYBOOK
+.
+Test Mode: Storybook 8 offers a “test mode” that enables 2-4x faster static builds by disabling certain features that are not necessary for testing, like documentation and controls​
+STORYBOOK
+.
+Framework Support and Compatibility:
+
+Framework-Specific Improvements: Storybook 8 provides expanded support for frameworks such as React, Angular, Vue, and Svelte, including experimental support for React Server Components, and compatibility with the latest Vue features​
+STORYBOOK
+.
+Next.js Vite Plugin: A new experimental plugin for Next.js with Vite emulates the Next.js environment, allowing Storybook users to leverage the faster Vite build system with accurate environment emulation for Next.js features​
+STORYBOOK
+.
+User Interface Overhaul:
+
+Mobile and Desktop UI Refresh: Storybook 8 has redesigned its UI, especially the mobile experience, making the tool easier to use across devices. Improvements include smoother transitions between desktop and mobile layouts, updated typography, and new icons​
+STORYBOOK
+.
+Expanded Story Globals:
+
+Story Globals: Storybook 8 introduces "story globals," which lets developers set contextual parameters (e.g., themes, locales) at a per-story level. This feature allows easier simulation of different UI environments without toolbar reconfiguration​
+STORYBOOK
+.
+Improved Dependency Management:
+
+Reduced Dependency Bloat: In Storybook 8, the package structure has been streamlined to reduce dependency conflicts and management issues. This is especially helpful for projects with complex dependency trees and helps to mitigate issues with version conflicts​
+STORYBOOK
+.
+Component Interactions and Testing:
+
+Improved Interaction Testing: Storybook 8 improves the interactivity in stories and enables more streamlined testing configurations, including integrations with Chromatic and Test Runner. These changes help frontend developers visually and functionally test component interactions more easily than in Storybook 6​
+STORYBOOK
+​
+STORYBOOK
+.
+Benefits of Upgrading to Storybook 8
+Faster Development Workflow: The various performance optimizations in Storybook 8, from reduced install sizes to faster builds and quicker HMR with Vite, make it a more efficient tool, especially for larger projects or those using modern frameworks like Next.js.
+
+Enhanced UI/UX: The UI updates and the addition of story globals simplify component development, testing, and theming for both desktop and mobile, making Storybook 8 more intuitive and versatile for different screen sizes.
+
+Better Testing Capabilities: Storybook 8’s dedicated test mode, along with improved integration with Chromatic, offers faster and more robust ways to perform visual regression testing, making it easier to maintain UI consistency over time.
+
+Reduced Dependency Hassles: By streamlining dependencies, Storybook 8 makes it easier to manage and integrate with other packages, reducing install and configuration issues common in complex projects.
+
+Improved Framework Support: Storybook 8's enhanced support for the latest versions of React, Vue, Angular, and Svelte ensures compatibility with current frontend best practices and features, making it easier to use Storybook with cutting-edge frameworks.
+
+In summary, upgrading to Storybook 8 provides a more performant, flexible, and modern development environment tailored to meet the needs of today’s frontend development. The enhancements in build speed, UI, testing, and dependency management make it a valuable tool for both individual developers and large teams working across complex projects.
+
+
+
+
+
+
+Είπες:
+how can i apply semantic versioning and releases to an angular design system? How can the consumer projects get notified and how can they consume updates for deprecated components
+Το ChatGPT είπε:
+ChatGPT
+Applying semantic versioning (SemVer) and structured releases to an Angular design system enables you to systematically manage and communicate changes, including updates, fixes, and deprecations. Here’s a step-by-step guide for setting up this process and ensuring consumers are notified and can integrate updates smoothly.
+
+1. Implement Semantic Versioning (SemVer) Standards
+SemVer Structure: Use semantic versioning in the format of MAJOR.MINOR.PATCH, where:
+MAJOR changes introduce breaking changes.
+MINOR changes add new features that are backward-compatible.
+PATCH changes are for bug fixes or minor updates that do not impact functionality.
+Git Tagging and Releases: Tag each release in your version control (e.g., Git) to help consumers track versions. For example, create Git tags like v1.0.0 for the first release and increment them as per SemVer rules.
+2. Automate Versioning and Release Notes
+Automated Versioning: Tools like Standard Version or Semantic Release can automate versioning and changelog generation based on conventional commit messages. These tools help you automatically increment version numbers and generate release notes when changes are merged.
+Changelog Generation: Generate and maintain a changelog with each release, providing details on new features, bug fixes, and breaking changes. Consumers can review this log to understand changes in each release.
+3. Notify Consumer Projects of Updates
+Release Notifications:
+GitHub or GitLab Releases: If your code repository is on GitHub or GitLab, use the platform’s release feature to generate release notes and notify users. Subscribers to your repository will receive notifications when a new release is published.
+NPM Registry Notifications: If your design system is published as an NPM package, consumers can see new versions on NPM, and tools like npm outdated in their projects will indicate available updates.
+Automated Email or Slack Notifications: For more direct communication, consider setting up email notifications or using a tool like Slack to notify team members of releases.
+4. Managing Deprecated Components
+Deprecation Warnings: When deprecating components, use Angular’s @Deprecated decorator (or a similar approach if needed) to add warnings in the component documentation or UI that notify developers of the upcoming removal. Add deprecation notes to the changelog and release notes.
+Deprecation Timeline: Define a standard deprecation policy (e.g., deprecated features will be removed after two major releases). This allows consumer projects time to transition to new components.
+Migration Documentation: Provide migration guides or automated migration scripts using tools like ng update in Angular CLI. This helps consumers update deprecated components to newer alternatives with minimal friction.
+5. Consuming Updates in Consumer Projects
+Version Locking: Use version ranges in the consumer projects’ package.json files to automatically consume updates within specified ranges (e.g., "@your-design-system": "^1.0.0" will allow compatible MINOR and PATCH updates).
+Update Notifications: Regularly run npm outdated or yarn outdated in consumer projects to check for new versions of your design system. Integrate these checks into CI/CD pipelines for visibility on available updates.
+Automated Migration: For breaking changes, provide schematics or scripts that consumers can run to automatically migrate their codebase to be compatible with new versions.
+Example Workflow
+Publishing a New Version:
+
+Implement new components or updates.
+Commit changes following conventional commit messages.
+Use semantic-release to automatically create a new version, tag it in Git, generate release notes, and publish to NPM.
+Notify consumers via GitHub release notes and, if applicable, through email or Slack.
+Handling Deprecations:
+
+Mark components as deprecated in the documentation and the UI.
+Update the changelog and release notes to detail the deprecation and suggest alternatives.
+Provide migration tools and guides to assist consumers in updating their code.
+By following these steps, your Angular design system will use a structured, consumer-friendly approach to versioning, notifications, and updates, making it easier for users to stay current with your design system's improvements and transitions.
