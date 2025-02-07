@@ -1,0 +1,35 @@
+const components = ["apple", "banana", "cherry", "date", "elderberry"];
+const baseURL = "https://api.example.com/search/";
+
+async function fetchData() {
+    let mergedData = {};
+    for (let word of components) {
+        let url = `${baseURL}${encodeURIComponent(word)}/results`;
+        try {
+            let response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            let data = await response.json();
+            mergedData[word] = data;
+        } catch (error) {
+            console.error(`Error fetching data for ${word}:`, error);
+        }
+    }
+    exportData(mergedData);
+}
+
+function exportData(data) {
+    const jsonData = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonData], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "mergedData.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+fetchData();
