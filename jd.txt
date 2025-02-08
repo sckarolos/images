@@ -1,118 +1,41 @@
-const components = ["apple", "banana", "cherry", "date", "elderberry"];
-const baseURL = "https://api.example.com/search/";
+const fs = require('fs');
 
-async function fetchData() {
-    let mergedData = {};
-    for (let word of components) {
-        let url = `${baseURL}${encodeURIComponent(word)}/results`;
-        try {
-            let response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            let data = await response.json();
-            mergedData[word] = data;
-        } catch (error) {
-            console.error(`Error fetching data for ${word}:`, error);
-        }
+// Define file path
+const filePath = 'merged.json';
+
+// Read the JSON file
+fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+        console.error('Error reading file:', err);
+        return;
     }
-    exportData(mergedData);
-}
-
-function exportData(data) {
-    const jsonData = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonData], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "mergedData.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-fetchData();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const fs = require("fs");
-const path = require("path");
-
-const folderPath = "./json_files"; // Change this to your folder path
-const outputFile = "mergedData.json";
-
-// Function to read all JSON files in a folder and merge them
-function mergeJsonFiles(directory, outputFile) {
-    let mergedData = {};
-
-    fs.readdir(directory, (err, files) => {
-        if (err) {
-            console.error("Error reading directory:", err);
-            return;
+    
+    try {
+        // Parse JSON data
+        let jsonData = JSON.parse(data);
+        
+        // Recursive function to update project values
+        function updateProject(obj) {
+            for (let key in obj) {
+                if (typeof obj[key] === 'object' && obj[key] !== null) {
+                    updateProject(obj[key]); // Recurse for nested objects
+                } else if (key === 'project' && typeof obj[key] === 'string') {
+                    obj[key] = obj[key].includes('retail-direct') ? 'uka' : 'fas';
+                }
+            }
         }
-
-        const jsonFiles = files.filter(file => file.endsWith(".json"));
-        let filesProcessed = 0;
-
-        if (jsonFiles.length === 0) {
-            console.log("No JSON files found in the folder.");
-            return;
-        }
-
-        jsonFiles.forEach(file => {
-            const filePath = path.join(directory, file);
-            fs.readFile(filePath, "utf8", (err, data) => {
-                if (err) {
-                    console.error(Error reading file ${file}:, err);
-                    return;
-                }
-
-                try {
-                    const jsonData = JSON.parse(data);
-                    Object.assign(mergedData, jsonData);
-                } catch (parseError) {
-                    console.error(Error parsing JSON from file ${file}:, parseError);
-                }
-
-                filesProcessed++;
-                if (filesProcessed === jsonFiles.length) {
-                    saveMergedJson(outputFile, mergedData);
-                }
-            });
+        
+        updateProject(jsonData);
+        
+        // Write updated JSON back to file
+        fs.writeFile(filePath, JSON.stringify(jsonData, null, 2), 'utf8', (err) => {
+            if (err) {
+                console.error('Error writing file:', err);
+                return;
+            }
+            console.log('File updated successfully!');
         });
-    });
-}
-
-// Function to save the merged data as a JSON file
-function saveMergedJson(outputFile, data) {
-    fs.writeFile(outputFile, JSON.stringify(data, null, 2), "utf8", err => {
-        if (err) {
-            console.error("Error saving merged JSON file:", err);
-        } else {
-            console.log(Merged data saved successfully to ${outputFile});
-        }
-    });
-}
-
-// Run the function
-mergeJsonFiles(folderPath, outputFile);
+    } catch (parseError) {
+        console.error('Error parsing JSON:', parseError);
+    }
+});
