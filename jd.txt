@@ -5,12 +5,11 @@ import { HttpClient } from '@angular/common/http';
 
 interface TableEntry {
   projectKey: string;
-  projectName: string;
   applicationName: string;
   component: string;
   section: string;
   componentCount: number;
-  importCount: number;
+  isFirstEntry: boolean;
 }
 
 @Component({
@@ -21,7 +20,7 @@ interface TableEntry {
   styleUrls: ['./json-table.component.css']
 })
 export class JsonTableComponent implements OnInit {
-  displayedColumns: string[] = ['projectKey', 'projectName', 'applicationName', 'component', 'section', 'componentCount', 'importCount'];
+  displayedColumns: string[] = ['projectKey', 'applicationName', 'component', 'section', 'componentCount'];
   data: TableEntry[] = [];
 
   constructor(private http: HttpClient) {}
@@ -40,116 +39,28 @@ export class JsonTableComponent implements OnInit {
       if (json.hasOwnProperty(key)) {
         const spec = json[key].spec;
         const components = json[key].components;
+        let isFirstEntry = true;
         for (const component in components) {
           if (components.hasOwnProperty(component)) {
             for (const section in components[component]) {
               if (components[component].hasOwnProperty(section)) {
-                const { componentCount, importCount } = components[component][section];
+                const { componentCount } = components[component][section];
                 result.push({
-                  projectKey: spec.projectKey,
-                  projectName: spec.projectName,
-                  applicationName: spec.applicationName,
+                  projectKey: isFirstEntry ? spec.projectKey : '',
+                  applicationName: isFirstEntry ? spec.applicationName : '',
                   component,
                   section,
                   componentCount,
-                  importCount
+                  isFirstEntry: isFirstEntry
                 });
+                isFirstEntry = false;
               }
             }
           }
         }
       }
     }
+    console.log('Transformed Data:', result);
     return result;
   }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-<table mat-table [dataSource]="data" class="mat-elevation-z8">
-
-  <!-- Project Key Column -->
-  <ng-container matColumnDef="projectKey">
-    <th mat-header-cell *matHeaderCellDef> Project Key </th>
-    <td mat-cell *matCellDef="let element"> {{element.projectKey}} </td>
-  </ng-container>
-
-  <!-- Project Name Column -->
-  <ng-container matColumnDef="projectName">
-    <th mat-header-cell *matHeaderCellDef> Project Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.projectName}} </td>
-  </ng-container>
-
-  <!-- Application Name Column -->
-  <ng-container matColumnDef="applicationName">
-    <th mat-header-cell *matHeaderCellDef> Application Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.applicationName}} </td>
-  </ng-container>
-
-  <!-- Component Column -->
-  <ng-container matColumnDef="component">
-    <th mat-header-cell *matHeaderCellDef> Component </th>
-    <td mat-cell *matCellDef="let element"> {{element.component}} </td>
-  </ng-container>
-
-  <!-- Section Column -->
-  <ng-container matColumnDef="section">
-    <th mat-header-cell *matHeaderCellDef> Section </th>
-    <td mat-cell *matCellDef="let element"> {{element.section}} </td>
-  </ng-container>
-
-  <!-- Component Count Column -->
-  <ng-container matColumnDef="componentCount">
-    <th mat-header-cell *matHeaderCellDef> Component Count </th>
-    <td mat-cell *matCellDef="let element"> {{element.componentCount}} </td>
-  </ng-container>
-
-  <!-- Import Count Column -->
-  <ng-container matColumnDef="importCount">
-    <th mat-header-cell *matHeaderCellDef> Import Count </th>
-    <td mat-cell *matCellDef="let element"> {{element.importCount}} </td>
-  </ng-container>
-
-  <!-- Header and Row Definitions -->
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-</table>
-
-
-
-
-
-
-table {
-  width: 100%;
-  margin-top: 20px;
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-th, td {
-  padding: 12px;
-  text-align: left;
-}
-
-th {
-  background-color: #f5f5f5;
-}
-
-tr:last-child td {
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
 }
