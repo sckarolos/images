@@ -1,14 +1,96 @@
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-  </ng-container>
+import { Component, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
-  <ng-container matColumnDef="age">
-    <th mat-header-cell *matHeaderCellDef> Age </th>
-    <td mat-cell *matCellDef="let element"> {{element.age}} </td>
-  </ng-container>
+// Define the structure of the table data
+interface ComponentData {
+  projectKey: string;
+  projectName: string;
+  applicationName: string;
+  component: string;
+  section: string;
+  componentCount: number;
+  importCount: number;
+}
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+@Component({
+  selector: 'app-json-viewer',
+  templateUrl: './json-viewer.component.html',
+  styleUrls: ['./json-viewer.component.css']
+})
+export class JsonViewerComponent {
+  displayedColumns: string[] = ['projectKey', 'projectName', 'applicationName', 'component', 'section', 'componentCount', 'importCount'];
+  dataSource = new MatTableDataSource<ComponentData>([]);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  constructor() {}
+
+  // Handle File Selection
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const fileContent = e.target?.result as string;
+        try {
+          const jsonData = JSON.parse(fileContent);
+          this.parseJson(jsonData);
+        } catch (error) {
+          console.error('Invalid JSON file', error);
+        }
+      };
+      reader.readAsText(file);
+    }
+  }
+
+  // Parse JSON Data
+  parseJson(json: any): void {
+    const tableData: ComponentData[] = [];
+
+    // Loop through each project
+    for (const projectKey in json) {
+      if (json.hasOwnProperty(projectKey)) {
+        const project = json[projectKey];
+
+        // Extract project details
+        const projectName = project.spec.projectName;
+        const applicationName = project.spec.applicationName;
+
+        // Loop through components
+        for (const component in project.components) {
+          if (project.components.hasOwnProperty(component)) {
+            const sections = project.components[component];
+
+            // Loop through header/footer
+            for (const section in sections) {
+              if (sections.hasOwnProperty(section)) {
+                tableData.push({
+                  projectKey,
+                  projectName,
+                  applicationName,
+                  component,
+                  section,
+                  componentCount: sections[section].componentCount,
+                  importCount: sections[section].importCount
+                });
+              }
+            }
+          }
+        }
+      }
+    }
+
+    this.dataSource.data = tableData;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  // Apply Filter
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+}
