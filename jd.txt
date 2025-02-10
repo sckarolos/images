@@ -1,68 +1,9 @@
-<div>
-  <input type="file" (change)="onFileSelected($event)" accept=".json">
+// Import necessary Angular modules and Material components
+import { Component, OnInit } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
+import { HttpClient } from '@angular/common/http';
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    <ng-container matColumnDef="projectKey">
-      <th mat-header-cell *matHeaderCellDef> Project Key </th>
-      <td mat-cell *matCellDef="let element"> {{ element.projectKey }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="projectName">
-      <th mat-header-cell *matHeaderCellDef> Project Name </th>
-      <td mat-cell *matCellDef="let element"> {{ element.projectName }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="applicationName">
-      <th mat-header-cell *matHeaderCellDef> Application Name </th>
-      <td mat-cell *matCellDef="let element"> {{ element.applicationName }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="component">
-      <th mat-header-cell *matHeaderCellDef> Component </th>
-      <td mat-cell *matCellDef="let element"> {{ element.component }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="section">
-      <th mat-header-cell *matHeaderCellDef> Section </th>
-      <td mat-cell *matCellDef="let element"> {{ element.section }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="componentCount">
-      <th mat-header-cell *matHeaderCellDef> Component Count </th>
-      <td mat-cell *matCellDef="let element"> {{ element.componentCount }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="importCount">
-      <th mat-header-cell *matHeaderCellDef> Import Count </th>
-      <td mat-cell *matCellDef="let element"> {{ element.importCount }} </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import { Component } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-
-interface ComponentData {
+interface TableEntry {
   projectKey: string;
   projectName: string;
   applicationName: string;
@@ -73,54 +14,86 @@ interface ComponentData {
 }
 
 @Component({
-  selector: 'app-json-viewer',
-  templateUrl: './json-viewer.component.html',
-  styleUrls: ['./json-viewer.component.css']
-})
-export class JsonViewerComponent {
-  displayedColumns: string[] = ['projectKey', 'projectName', 'applicationName', 'component', 'section', 'componentCount', 'importCount'];
-  dataSource = new MatTableDataSource<ComponentData>([]);
+  selector: 'app-json-table',
+  standalone: true,
+  imports: [MatTableModule],
+  template: `
+    <table mat-table [dataSource]="data" class="mat-elevation-z8">
+      <ng-container matColumnDef="projectKey">
+        <th mat-header-cell *matHeaderCellDef> Project Key </th>
+        <td mat-cell *matCellDef="let element"> {{element.projectKey}} </td>
+      </ng-container>
+      
+      <ng-container matColumnDef="projectName">
+        <th mat-header-cell *matHeaderCellDef> Project Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.projectName}} </td>
+      </ng-container>
+      
+      <ng-container matColumnDef="applicationName">
+        <th mat-header-cell *matHeaderCellDef> Application Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.applicationName}} </td>
+      </ng-container>
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const fileContent = e.target?.result as string;
-        try {
-          const jsonData = JSON.parse(fileContent);
-          this.parseJson(jsonData);
-        } catch (error) {
-          console.error('Invalid JSON file', error);
-        }
-      };
-      reader.readAsText(file);
-    }
+      <ng-container matColumnDef="component">
+        <th mat-header-cell *matHeaderCellDef> Component </th>
+        <td mat-cell *matCellDef="let element"> {{element.component}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="section">
+        <th mat-header-cell *matHeaderCellDef> Section </th>
+        <td mat-cell *matCellDef="let element"> {{element.section}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="componentCount">
+        <th mat-header-cell *matHeaderCellDef> Component Count </th>
+        <td mat-cell *matCellDef="let element"> {{element.componentCount}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="importCount">
+        <th mat-header-cell *matHeaderCellDef> Import Count </th>
+        <td mat-cell *matCellDef="let element"> {{element.importCount}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  `,
+  styles: [
+    'table { width: 100%; margin-top: 20px; }',
+    'th, td { padding: 8px; text-align: left; }'
+  ]
+})
+export class JsonTableComponent implements OnInit {
+  displayedColumns: string[] = ['projectKey', 'projectName', 'applicationName', 'component', 'section', 'componentCount', 'importCount'];
+  data: TableEntry[] = [];
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    this.http.get<any>('assets/data/data.json').subscribe(json => {
+      this.data = this.transformData(json);
+    });
   }
 
-  parseJson(json: any): void {
-    const tableData: ComponentData[] = [];
-
-    for (const projectKey in json) {
-      if (json.hasOwnProperty(projectKey)) {
-        const project = json[projectKey];
-        const projectName = project.spec.projectName;
-        const applicationName = project.spec.applicationName;
-
-        for (const component in project.components) {
-          if (project.components.hasOwnProperty(component)) {
-            const sections = project.components[component];
-
-            for (const section in sections) {
-              if (sections.hasOwnProperty(section)) {
-                tableData.push({
-                  projectKey,
-                  projectName,
-                  applicationName,
+  transformData(json: any): TableEntry[] {
+    const result: TableEntry[] = [];
+    for (const key in json) {
+      if (json.hasOwnProperty(key)) {
+        const spec = json[key].spec;
+        const components = json[key].components;
+        for (const component in components) {
+          if (components.hasOwnProperty(component)) {
+            for (const section in components[component]) {
+              if (components[component].hasOwnProperty(section)) {
+                const { componentCount, importCount } = components[component][section];
+                result.push({
+                  projectKey: spec.projectKey,
+                  projectName: spec.projectName,
+                  applicationName: spec.applicationName,
                   component,
                   section,
-                  componentCount: sections[section].componentCount,
-                  importCount: sections[section].importCount
+                  componentCount,
+                  importCount
                 });
               }
             }
@@ -128,7 +101,6 @@ export class JsonViewerComponent {
         }
       }
     }
-
-    this.dataSource.data = tableData;
+    return result;
   }
 }
