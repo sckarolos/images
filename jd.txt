@@ -63,3 +63,83 @@ export class JsonTableComponent implements OnInit {
     return result;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+<table mat-table [dataSource]="data" class="mat-elevation-z8">
+
+  <!-- Project Key Column -->
+  <ng-container matColumnDef="projectKey">
+    <th mat-header-cell *matHeaderCellDef> Project Key </th>
+    <td mat-cell *matCellDef="let element"> {{element.projectKey}} </td>
+  </ng-container>
+
+  <!-- Project Name Column -->
+  <ng-container matColumnDef="projectName">
+    <th mat-header-cell *matHeaderCellDef> Project Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.projectName}} </td>
+  </ng-container>
+
+  <!-- Application Name Column -->
+  <ng-container matColumnDef="applicationName">
+    <th mat-header-cell *matHeaderCellDef> Application Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.applicationName}} </td>
+  </ng-container>
+
+  <!-- Component Column -->
+  <ng-container matColumnDef="component">
+    <th mat-header-cell *matHeaderCellDef> Component </th>
+    <td mat-cell *matCellDef="let element"> {{element.component}} </td>
+  </ng-container>
+
+  <!-- Section Column -->
+  <ng-container matColumnDef="section">
+    <th mat-header-cell *matHeaderCellDef> Section </th>
+    <td mat-cell *matCellDef="let element"> {{element.section}} </td>
+  </ng-container>
+
+  <!-- Component Count Column -->
+  <ng-container matColumnDef="componentCount">
+    <th mat-header-cell *matHeaderCellDef> Component Count </th>
+    <td mat-cell *matCellDef="let element"> {{element.componentCount}} </td>
+  </ng-container>
+
+  <!-- Import Count Column -->
+  <ng-container matColumnDef="importCount">
+    <th mat-header-cell *matHeaderCellDef> Import Count </th>
+    <td mat-cell *matCellDef="let element"> {{element.importCount}} </td>
+  </ng-container>
+
+  <!-- Header and Row Definitions -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>
+
+
+
+
+
+
+table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+}
+
+.mat-elevation-z8 {
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
