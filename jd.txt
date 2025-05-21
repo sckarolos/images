@@ -1,1 +1,89 @@
-reset
+1. System Over Silos
+We prioritize shared solutions over team-specific fixes.
+
+Every contribution should aim to solve problems broadly, not just locally.
+
+When a component or pattern is needed in one product, we evaluate how it can serve others.
+
+Avoid custom code forks — unify and extend the system.
+
+2. Quality is a Shared Responsibility
+Every contributor is accountable for code, performance, and accessibility.
+
+Follow system standards for API design, naming, and behavior.
+
+Build with accessibility (a11y) and responsive design in mind.
+
+Test components thoroughly: unit, visual regression, and interaction testing.
+
+3. Design–Dev Alignment is Non-Negotiable
+Components must reflect design intent and stay in sync with the design library.
+
+We code to the spec — not around it.
+
+Developers proactively flag gaps or ambiguities in designs.
+
+Design tokens are the bridge — always use them.
+
+4. Document What You Build
+A component without documentation is not a system component.
+
+Every contribution includes usage examples, API docs, and rationale.
+
+Explain variations, edge cases, and any limitations.
+
+Keep code comments and changelogs clean and consistent.
+
+5. Contribute Through the System, Not Around It
+We improve the design system before adding exceptions.
+
+New needs go through the request/contribution flow.
+
+Avoid implementing one-off variants or overrides in isolation.
+
+When something doesn’t fit the system, propose an improvement — not a workaround.
+
+6. Stable Foundations, Iterative Evolution
+We balance reliability with continuous improvement.
+
+Version components responsibly with clear changelogs.
+
+Deprecate with warnings and documentation, not sudden breaks.
+
+Favor backwards-compatible improvements when possible.
+
+7. Cross-Team, Cross-Discipline Collaboration
+We are not just devs — we co-create with design, QA, content, and accessibility.
+
+We value feedback from anyone using the system.
+
+Pairing, async reviews, and Slack channels are essential to our workflow.
+
+No major component ships without design + dev sign-off.
+
+8. Be a Multiplier, Not a Bottleneck
+Our work should enable others to move faster, not slower.
+
+Build components that are flexible, predictable, and easy to compose.
+
+Reduce custom logic in downstream teams by baking logic into the system.
+
+Provide guidance, templates, and mentoring — not just code.
+
+9. Think Long-Term
+Favor scalable, maintainable architecture over quick hacks.
+
+Optimize for reuse, theming, and future design changes.
+
+Evaluate performance and bundle impact with every major change.
+
+Keep components small, decoupled, and layered (e.g., presentational vs. logical).
+
+10. Celebrate, Learn, and Improve Together
+Guilds are communities — we share wins, failures, and knowledge.
+
+Demo new components and improvements.
+
+Document lessons learned in retros and design critiques.
+
+Encourage experimentation and learning through spikes or internal tooling.
