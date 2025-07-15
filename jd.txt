@@ -1,89 +1,35 @@
-1. System Over Silos
-We prioritize shared solutions over team-specific fixes.
+I wanted to share a brief update on the progress we've made on the Nebula Design System, what’s currently in motion, and what’s ahead for Q3 2025.
 
-Every contribution should aim to solve problems broadly, not just locally.
+✅ Recent Highlights
 
-When a component or pattern is needed in one product, we evaluate how it can serve others.
+Governance Model Rolled Out:
+We presented the new governance framework to all UKPI and FAS developers. Code changes are now centrally reviewed and prioritised. Marcos and I, together with the design team, review all new component requests against reusability, usage data, and customisation needs.
 
-Avoid custom code forks — unify and extend the system.
+Backlog & Component Focus:
+Based on usage data analysis, we’ve created an extended backlog and prioritised fixing and enhancing the most essential, reusable components – our “building blocks.”
 
-2. Quality is a Shared Responsibility
-Every contributor is accountable for code, performance, and accessibility.
+New Strategic Components:
+Development is underway on two new, fully customisable components – Widget and Card – designed to meet the needs of both Advice Dashboard (FAS) and Onboarding (UKPI). These follow all agreed standards: accessibility, test coverage, naming conventions, and dynamic content support.
 
-Follow system standards for API design, naming, and behavior.
+Tech Debt & Upgrades:
 
-Build with accessibility (a11y) and responsive design in mind.
+Angular, Node, Nx, and Storybook have been upgraded (now on Angular 15; targeting Angular 17 by end of Q3).
 
-Test components thoroughly: unit, visual regression, and interaction testing.
+GitHub migration is nearly complete; only the AEM integration remains, currently in testing with the AEM team.
 
-3. Design–Dev Alignment is Non-Negotiable
-Components must reflect design intent and stay in sync with the design library.
+Accessibility Improvements:
+We’ve reduced Nebula’s accessibility issues by 10–15%, with a goal to reach 45% by end of September and 90% by end of year. Collaboration with the Accessibility Guild is ongoing, and we’re actively training others across design, marketing, and content.
 
-We code to the spec — not around it.
+🔭 Coming in Q3 2025
 
-Developers proactively flag gaps or ambiguities in designs.
+Finalise GitHub migration (AEM)
 
-Design tokens are the bridge — always use them.
+Launch and promote the new Widget and Card components via Nebula Office Hours
 
-4. Document What You Build
-A component without documentation is not a system component.
+Continue component backlog refinement and enhancement
 
-Every contribution includes usage examples, API docs, and rationale.
+Reach Angular 17 upgrade milestone
 
-Explain variations, edge cases, and any limitations.
+Continue improving accessibility with focus on new projects using Nebula from day one
 
-Keep code comments and changelogs clean and consistent.
-
-5. Contribute Through the System, Not Around It
-We improve the design system before adding exceptions.
-
-New needs go through the request/contribution flow.
-
-Avoid implementing one-off variants or overrides in isolation.
-
-When something doesn’t fit the system, propose an improvement — not a workaround.
-
-6. Stable Foundations, Iterative Evolution
-We balance reliability with continuous improvement.
-
-Version components responsibly with clear changelogs.
-
-Deprecate with warnings and documentation, not sudden breaks.
-
-Favor backwards-compatible improvements when possible.
-
-7. Cross-Team, Cross-Discipline Collaboration
-We are not just devs — we co-create with design, QA, content, and accessibility.
-
-We value feedback from anyone using the system.
-
-Pairing, async reviews, and Slack channels are essential to our workflow.
-
-No major component ships without design + dev sign-off.
-
-8. Be a Multiplier, Not a Bottleneck
-Our work should enable others to move faster, not slower.
-
-Build components that are flexible, predictable, and easy to compose.
-
-Reduce custom logic in downstream teams by baking logic into the system.
-
-Provide guidance, templates, and mentoring — not just code.
-
-9. Think Long-Term
-Favor scalable, maintainable architecture over quick hacks.
-
-Optimize for reuse, theming, and future design changes.
-
-Evaluate performance and bundle impact with every major change.
-
-Keep components small, decoupled, and layered (e.g., presentational vs. logical).
-
-10. Celebrate, Learn, and Improve Together
-Guilds are communities — we share wins, failures, and knowledge.
-
-Demo new components and improvements.
-
-Document lessons learned in retros and design critiques.
-
-Encourage experimentation and learning through spikes or internal tooling.
+Please let me know if you'd like a deeper dive into any of these areas.
