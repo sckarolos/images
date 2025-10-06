@@ -1,0 +1,120 @@
+🧩 What is RAG (in this context)?
+
+RAG makes your LLM “design-system aware.” Instead of asking a model to generate Angular code blindly, you feed it your component library + docs + Storybook stories so it can ground answers in your actual system.
+
+Without RAG:
+
+User: “Make a primary button” → LLM might hallucinate <blue-button>
+
+With RAG:
+
+User: “Make a primary button” → RAG fetches your MyButton docs from Storybook and the LLM outputs:
+
+<my-button variant="primary">Click Me</my-button>
+
+⚙️ RAG Pipeline for an Angular Design System
+1. Collect Knowledge
+
+Gather sources of truth:
+
+Component code: .ts and .html in libs/design-system/
+
+Storybook stories: Button.stories.ts → usage examples
+
+Documentation: README, MDX files, API docs (if any)
+
+2. Embed Knowledge
+
+Use an embedding model (e.g. OpenAI text-embedding-3-small, or open-source like sentence-transformers).
+
+Split long files into chunks (e.g. per component, per story).
+
+Store them in a vector database (Pinecone, Weaviate, Qdrant, or even SQLite with pgvector).
+
+Example record in DB:
+
+{
+  "id": "my-button-docs",
+  "content": "MyButton: Props { variant: primary|secondary, disabled: boolean } Example: <my-button variant='primary'>Click</my-button>",
+  "metadata": { "component": "MyButton" }
+}
+
+3. Query + Retrieve
+
+When the user says:
+
+"Give me a form with a primary button and a text input"
+
+Steps:
+
+Convert query → embedding.
+
+Vector DB retrieves most relevant chunks (e.g. docs for MyButton, MyInput).
+
+Send these docs + the user prompt to the LLM.
+
+4. LLM Generation (Grounded in RAG)
+
+The LLM gets a prompt like:
+
+You are an assistant generating Angular templates using this design system. 
+Only use the components provided below:
+
+--- COMPONENT DOCS ---
+<MyButton> props: variant, disabled
+<MyInput> props: label, type
+--- END DOCS ---
+
+User request: A form with a text input for email and a primary button.
+
+
+Expected output:
+
+<form>
+  <my-input label="Email" type="email"></my-input>
+  <my-button variant="primary">Submit</my-button>
+</form>
+
+5. Validation Layer
+
+Parse output.
+
+Ensure only known components are used.
+
+Auto-fix simple mismatches (e.g., “color=primary” → variant="primary").
+
+6. Preview in Angular + Storybook
+
+Render result in a preview pane using Angular’s ComponentFactoryResolver or dynamic Storybook rendering.
+
+Let users tweak code live (Monaco Editor).
+
+🔧 Tools You’ll Likely Use
+
+Embeddings: OpenAI text-embedding-3-small / text-embedding-3-large, or OSS like all-MiniLM-L6-v2.
+
+Vector DB: Pinecone, Weaviate, Qdrant, or Supabase pgvector.
+
+LLM: GPT-4.1 / Claude 3.5 for prototyping, later LLaMA/Mistral fine-tuned.
+
+Glue Code:
+
+Node.js/NestJS backend to handle embedding + retrieval.
+
+Angular frontend to send queries, render preview.
+
+🚀 MVP Workflow
+
+Index your storybook folder (stories + components).
+
+Build a small NestJS API:
+
+/query endpoint → does RAG retrieval + LLM call.
+
+In Angular app:
+
+Add a chat UI (user prompt).
+
+Show preview of LLM output as Angular code.
+
+👉 With this setup, your LLM won’t hallucinate new components — it’ll only generate UI with the building blocks you’ve already defined in your design system.
