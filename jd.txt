@@ -1,120 +1,273 @@
-🧩 What is RAG (in this context)?
+This roadmap outlines the strategic focus areas for the UI Guild to evolve frontend architecture, improve developer experience, and scale the Nebula Design System across platforms.
+The initiatives move through a lifecycle of exploration → proof of concept → standards → adoption, ensuring experimentation leads to actionable outcomes for product teams.
 
-RAG makes your LLM “design-system aware.” Instead of asking a model to generate Angular code blindly, you feed it your component library + docs + Storybook stories so it can ground answers in your actual system.
+1. Micro Frontend + BFF Strategy
+Objective
 
-Without RAG:
+Define a scalable frontend architecture that enables teams to deliver independently while maintaining consistency and performance.
 
-User: “Make a primary button” → LLM might hallucinate <blue-button>
+Focus Areas
 
-With RAG:
+Micro frontend architecture patterns
 
-User: “Make a primary button” → RAG fetches your MyButton docs from Storybook and the LLM outputs:
+Backend-for-Frontend (BFF) patterns for domain-based APIs
 
-<my-button variant="primary">Click Me</my-button>
+Communication and integration between MFEs
 
-⚙️ RAG Pipeline for an Angular Design System
-1. Collect Knowledge
+Deployment, versioning, and ownership models
 
-Gather sources of truth:
+Expected Outcomes
 
-Component code: .ts and .html in libs/design-system/
+Reference architecture for Micro Frontends
 
-Storybook stories: Button.stories.ts → usage examples
+BFF integration patterns for frontend teams
 
-Documentation: README, MDX files, API docs (if any)
+Architecture decision records and implementation guidelines
 
-2. Embed Knowledge
+Example reference implementations
 
-Use an embedding model (e.g. OpenAI text-embedding-3-small, or open-source like sentence-transformers).
+This initiative ensures teams can scale frontend development across domains without introducing architectural fragmentation.
 
-Split long files into chunks (e.g. per component, per story).
+2. State Management Strategy
+Objective
 
-Store them in a vector database (Pinecone, Weaviate, Qdrant, or even SQLite with pgvector).
+Establish a clear and consistent state management approach for Angular applications.
 
-Example record in DB:
+Focus Areas
 
-{
-  "id": "my-button-docs",
-  "content": "MyButton: Props { variant: primary|secondary, disabled: boolean } Example: <my-button variant='primary'>Click</my-button>",
-  "metadata": { "component": "MyButton" }
-}
+Evaluation of modern Angular state management approaches
 
-3. Query + Retrieve
+Comparison between signals-based state and traditional global state management
 
-When the user says:
+State boundaries in distributed frontend architectures
 
-"Give me a form with a primary button and a text input"
+Patterns for local versus global state
 
-Steps:
+Expected Outcomes
 
-Convert query → embedding.
+Recommended state management strategy
 
-Vector DB retrieves most relevant chunks (e.g. docs for MyButton, MyInput).
+Guidelines for structuring application state
 
-Send these docs + the user prompt to the LLM.
+Example implementations demonstrating recommended patterns
 
-4. LLM Generation (Grounded in RAG)
+Documentation for teams adopting the approach
 
-The LLM gets a prompt like:
+The goal is to reduce architectural inconsistency while improving maintainability and developer productivity.
 
-You are an assistant generating Angular templates using this design system. 
-Only use the components provided below:
+3. Mobile Strategy for Nebula Design System
+Objective
 
---- COMPONENT DOCS ---
-<MyButton> props: variant, disabled
-<MyInput> props: label, type
---- END DOCS ---
+Define how the Nebula Design System supports mobile experiences while maintaining design consistency and enabling efficient development across platforms.
 
-User request: A form with a text input for email and a primary button.
+As products increasingly deliver mobile experiences, Nebula must evolve to support:
 
+responsive and mobile-first UI patterns
 
-Expected output:
+touch-friendly components
 
-<form>
-  <my-input label="Email" type="email"></my-input>
-  <my-button variant="primary">Submit</my-button>
-</form>
+cross-platform design consistency
 
-5. Validation Layer
+mobile application architectures
 
-Parse output.
+Without a clear strategy, teams may create independent mobile solutions, resulting in duplicated work and inconsistent user experiences.
 
-Ensure only known components are used.
+Strategic Approaches to Evaluate
+Hybrid Mobile (Angular + Capacitor)
 
-Auto-fix simple mismatches (e.g., “color=primary” → variant="primary").
+One approach is using Angular applications wrapped as native mobile apps with Capacitor and Angular.
 
-6. Preview in Angular + Storybook
+This approach allows:
 
-Render result in a preview pane using Angular’s ComponentFactoryResolver or dynamic Storybook rendering.
+reuse of existing Angular components
 
-Let users tweak code live (Monaco Editor).
+shared codebases between web and mobile
 
-🔧 Tools You’ll Likely Use
+access to native device capabilities such as camera, notifications, and biometrics
 
-Embeddings: OpenAI text-embedding-3-small / text-embedding-3-large, or OSS like all-MiniLM-L6-v2.
+Key evaluation areas include:
 
-Vector DB: Pinecone, Weaviate, Qdrant, or Supabase pgvector.
+performance on mobile devices
 
-LLM: GPT-4.1 / Claude 3.5 for prototyping, later LLaMA/Mistral fine-tuned.
+responsiveness of Nebula components
 
-Glue Code:
+integration with native APIs
 
-Node.js/NestJS backend to handle embedding + retrieval.
+developer workflow for mobile development
 
-Angular frontend to send queries, render preview.
+This model prioritizes code reuse and faster delivery.
 
-🚀 MVP Workflow
+Native Mobile (React Native)
 
-Index your storybook folder (stories + components).
+Another option is building a native mobile component implementation using React Native.
 
-Build a small NestJS API:
+In this model:
 
-/query endpoint → does RAG retrieval + LLM call.
+Nebula has separate web and mobile implementations
 
-In Angular app:
+design tokens and visual standards remain shared
 
-Add a chat UI (user prompt).
+This approach prioritizes:
 
-Show preview of LLM output as Angular code.
+native performance
 
-👉 With this setup, your LLM won’t hallucinate new components — it’ll only generate UI with the building blocks you’ve already defined in your design system.
+mobile interaction patterns
+
+deeper platform integration
+
+However, it introduces additional complexity due to maintaining multiple component implementations.
+
+Design System Considerations
+
+Regardless of the architecture chosen, Nebula must support mobile by introducing:
+
+responsive component design
+
+mobile interaction patterns
+
+shared design tokens
+
+cross-platform design consistency
+
+Some components may require mobile-specific behaviors, such as adapted navigation patterns, modal interactions, or layout transformations.
+
+Role of Component Development Tools
+
+Tools such as Storybook can support mobile readiness by enabling:
+
+mobile viewport previews
+
+component documentation and usage examples
+
+visual regression testing
+
+validation of responsive behavior
+
+This helps ensure components behave consistently across devices before being adopted by product teams.
+
+AI Opportunities
+
+Emerging AI tools may help reduce the effort of supporting multiple platforms.
+
+Tools such as:
+
+Claude
+
+GitHub Copilot
+
+can be explored to support:
+
+generating mobile component implementations
+
+converting Angular components into mobile equivalents
+
+generating templates and component scaffolding
+
+improving documentation and developer workflows
+
+AI-assisted tooling may significantly accelerate the evolution of the design system across platforms.
+
+Expected Outcomes
+
+clear mobile architecture recommendation
+
+mobile-ready Nebula component guidelines
+
+reference implementations demonstrating the approach
+
+documented workflows for building mobile experiences
+
+This initiative ensures Nebula evolves into a cross-platform design system capable of supporting both web and mobile products.
+
+4. Accessibility
+Objective
+
+Improve accessibility across UI applications and embed accessibility practices into the development lifecycle.
+
+Focus Areas
+
+accessibility standards for Nebula components
+
+automated accessibility testing
+
+screen reader compatibility
+
+accessibility awareness across development teams
+
+Tools and Exploration
+
+Introduce visual and accessibility testing using tools such as Chromatic and explore AI-assisted validation techniques.
+
+Expected Outcomes
+
+accessibility guidelines for UI teams
+
+automated accessibility checks in CI pipelines
+
+improved accessibility awareness through guild workshops
+
+improved baseline accessibility scores across applications
+
+This initiative ensures accessibility becomes a built-in part of the UI development workflow rather than a late-stage validation step.
+
+5. AEM Cloud Strategy
+Objective
+
+Define how frontend applications integrate with Adobe Experience Manager Cloud.
+
+Focus Areas
+
+headless versus hybrid AEM architectures
+
+integration with micro frontend environments
+
+content modeling strategies
+
+frontend rendering approaches
+
+Expected Outcomes
+
+recommended frontend integration architecture
+
+reusable integration patterns
+
+example implementations demonstrating best practices
+
+This initiative ensures that UI teams can efficiently integrate content management capabilities into frontend applications.
+
+6. AI Exploration for UI Development
+Objective
+
+Explore how artificial intelligence can improve the UI development workflow, design system operations, and developer productivity.
+
+Focus Areas
+
+Design workflow
+
+Exploration of AI capabilities in tools such as Figma to assist with design generation, layout suggestions, and design token creation.
+
+Product management workflow
+
+Evaluation of AI capabilities in tools such as Jira to support task creation, documentation, and workflow automation.
+
+Developer experience
+
+Investigation of AI-driven tooling to support:
+
+automated component generation
+
+template scaffolding
+
+design system documentation
+
+developer assistants for UI development
+
+Expected Outcomes
+
+identification of high-impact AI opportunities
+
+experimentation with AI-assisted component generation
+
+improved developer productivity through AI tooling
+
+This initiative positions the UI Guild to leverage AI as a force multiplier for design system development and frontend engineering workflows.
